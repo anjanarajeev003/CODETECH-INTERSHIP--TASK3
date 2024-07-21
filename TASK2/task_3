@@ -1,0 +1,148 @@
+import numpy as np
+import pandas as pd
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+df=pd.read_csv('Titanic-Dataset.csv')
+print(df.head())
+print(df.isnull().sum())
+
+#Fill the missing values with median and mode
+df['Age'] = df['Age'].fillna(df['Age'].median())
+df['Embarked'] = df['Embarked'].fillna(df['Embarked'].mode)
+df['Cabin'] = df['Cabin'].fillna(df['Cabin'].mode)
+print(df.isnull().sum())
+
+
+df = pd.get_dummies(df, columns=['Sex', 'Embarked','Cabin'])
+
+from sklearn.model_selection import train_test_split
+X = df.drop(['Survived', 'Name', 'Ticket', 'PassengerId'], axis=1)
+y = df['Survived']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+
+all_accuracy=[]
+all_precision=[]
+all_recall=[]
+all_f1=[]
+
+#LOGISTIC REGRESSION
+from sklearn.linear_model import LogisticRegression
+model=LogisticRegression()
+model.fit(X_train, y_train)
+predict=model.predict(X_test)
+predict
+
+#ACCURACY, PRECISION and F1SCORE of LOGISTIC REGRESSION
+accuracy=accuracy_score(y_test, predict)
+precision=precision_score(y_test,predict)
+recall=recall_score(y_test,predict)
+f1=f1_score(y_test,predict)
+
+all_accuracy.append(accuracy) 
+all_precision.append(precision)
+all_recall.append(recall)
+all_f1.append(f1) 
+
+print('ACCURACY:',accuracy)
+print('PRECISION:',precision)
+print('RECALL:',recall)
+print('F1 SCORE:',f1)
+
+
+
+#DESICION TREE
+from sklearn.tree import DecisionTreeClassifier
+model1=DecisionTreeClassifier()
+model1.fit(X_train, y_train)
+predict1=model1.predict(X_test)
+predict1
+
+#ACCURACY, PRECISION and F1SCORE of DESICION TREE
+accuracy_1=accuracy_score(y_test, predict1)
+precision_1=precision_score(y_test,predict1)
+recall_1=recall_score(y_test,predict1)
+f1_1=f1_score(y_test,predict1)
+
+all_accuracy.append(accuracy_1) 
+all_precision.append(precision_1)
+all_recall.append(recall_1)
+all_f1.append(f1_1)
+
+
+print('ACCURACY:',accuracy_1)
+print('PRECISION:',precision_1)
+print('RECALL:',recall_1)
+print('F1 SCORE:',f1_1)
+
+
+
+#RANDOM FOREST
+from sklearn.ensemble import RandomForestClassifier
+model2=RandomForestClassifier()
+model2.fit(X_train, y_train)
+predict2=model2.predict(X_test)
+predict2
+
+#ACCURACY, PRECISION and F1SCORE of RANDOM FOREST
+accuracy_2=accuracy_score(y_test, predict2)
+precision_2=precision_score(y_test,predict2)
+recall_2=recall_score(y_test,predict2)
+f1_2=f1_score(y_test,predict2)
+
+all_accuracy.append(accuracy_2) 
+all_precision.append(precision_2)
+all_recall.append(recall_2) 
+all_f1.append(f1_2) 
+
+
+print('ACCURACY:',accuracy_2)
+print('PRECISION:',precision_2)
+print('RECALL:',recall_2)
+print('F1 SCORE:',f1_2)
+
+
+
+#SUPPORT VECTOR MACHINES
+from sklearn.svm import SVC
+model3=SVC()
+model3.fit(X_train, y_train)
+predict3=model3.predict(X_test)
+predict3
+
+#ACCURACY, PRECISION and F1SCORE of SUPPORT VECTOR MACHINES
+accuracy_3=accuracy_score(y_test, predict3)
+precision_3=precision_score(y_test,predict3)
+recall_3=recall_score(y_test,predict3)
+f1_3=f1_score(y_test,predict3)
+
+all_accuracy.append(accuracy_3)
+all_precision.append(precision_3) 
+all_recall.append(recall_3) 
+all_f1.append(f1_3)
+
+
+print('ACCURACY:',accuracy_3)
+print('PRECISION:',precision_3)
+print('RECALL:',recall_3)
+print('F1 SCORE:',f1_3)
+
+
+
+
+models = ['Logistic Regression', 'Decision Tree', 'Random Forest', 'SVM']
+print(models)
+print (all_accuracy)
+print(all_precision)
+print(all_recall)
+print(all_f1)
+
+best_model_acc = models[all_accuracy.index(max(all_accuracy))]
+best_model_prec = models[all_precision.index(max(all_precision))]
+best_model_rec = models[all_recall.index(max(all_recall))]
+best_model_f1 = models[all_f1.index(max(all_f1))]
+
+print("\nBest Model based on Accuracy: {}".format(best_model_acc))
+print("Best Model based on Precision: {}".format(best_model_prec))
+print("Best Model based on Recall: {}".format(best_model_rec))
+print("Best Model based on F1 score: {}".format(best_model_f1))
